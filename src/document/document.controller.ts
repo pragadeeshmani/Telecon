@@ -1,14 +1,19 @@
-import { Controller, Get, Post, Param, Delete, UploadedFile, UseInterceptors, Body, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete, UploadedFile, UseInterceptors, Body, Patch, UseGuards } from '@nestjs/common';
 import { DocumentService } from './document.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('documents')
 export class DocumentController {
+  uploadDocument(arg0: { name: string; path: string; }) {
+    throw new Error('Method not implemented.');
+  }
   constructor(private readonly documentService: DocumentService) {}
 
   @Post('upload')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -20,16 +25,19 @@ export class DocumentController {
       }),
     }),
   )
-  async uploadFile(@UploadedFile() file: Express.Multer.File, @Body('title') title: string): Promise<import("/Users/pragadeesh/Documents/nodejs/workout/project1/src/document/document.entity").Document> {
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Body('title') title: string): Promise<import("C:/Users/priya/Documents/nodejs/Telecon/src/document/document.entity").Document> {
     return this.documentService.uploadDocument(title, file.filename);
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getAllDocuments() {
     return this.documentService.getAllDocuments();
   }
 
-  @Patch(':id')@UseInterceptors(
+  @Patch(':id')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
         destination: './uploads', // Folder to store uploaded files
@@ -45,11 +53,13 @@ export class DocumentController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async getDocumentById(@Param('id') id: number) {
     return this.documentService.getDocumentById(id);
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async deleteDocument(@Param('id') id: number) {
     return this.documentService.deleteDocument(id);
   }

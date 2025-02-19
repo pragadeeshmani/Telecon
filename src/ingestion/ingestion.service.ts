@@ -6,6 +6,18 @@ import { Ingestion } from './ingestion.entity';
 
 @Injectable()
 export class IngestionService {
+    startIngestion() {
+      throw new Error('Method not implemented.');
+    }
+    updateIngestionStatus(arg0: number, arg1: string, arg2: string) {
+      throw new Error('Method not implemented.');
+    }
+    getAllIngestions() {
+      throw new Error('Method not implemented.');
+    }
+    getIngestionById(arg0: number) {
+      throw new Error('Method not implemented.');
+    }
     private readonly pythonApiUrl = 'https://dummy-json.mock.beeceptor.com/posts'; // Change to your Python API endpoint
 
     async triggerIngestion(): Promise<any> {
